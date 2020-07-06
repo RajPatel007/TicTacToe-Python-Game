@@ -12,33 +12,22 @@ import time
 board = [" ", " ", " ", " ", " ", " ", " ", " ", " "]                           # empty board
 
 def clearBoard():                                                               # clearBoard function clears the board
-    for i in range(len(board)):
-        board[i] = " "
+    board = [" "] * 9
     playGame()                                                                  # playGame function call plays the game again
 
 def printBoard():                                                               # printBoard function prints 3X3 matrix board
-    print(" " + board[0] + " | " + board[1] + " | " + board[2])
-    print(" " + board[3] + " | " + board[4] + " | " + board[5])
-    print(" " + board[6] + " | " + board[7] + " | " + board[8])
+    for k in range(3):
+        print(f' {board[3 * k]} | {board[3 * k + 1]} | {board[3 * k + 2]}')
         
 def isWinner(board,player):                                                     # isWinner function checks the winning configurations for players
-    if (board[0] == player and board[4] == player and board[8] == player) or \
-       (board[0] == player and board[1] == player and board[2] == player) or \
-       (board[3] == player and board[4] == player and board[5] == player) or \
-       (board[6] == player and board[7] == player and board[8] == player) or \
-       (board[2] == player and board[4] == player and board[6] == player) or \
-       (board[0] == player and board[3] == player and board[6] == player) or \
-       (board[1] == player and board[4] == player and board[7] == player) or \
-       (board[2] == player and board[5] == player and board[8] == player):
-        return True
-    else:
-        return False
+    win_list = [
+        (0, 4, 8), (0, 1, 2), (3, 4, 5), (6, 7, 8),
+        (2, 4, 6), (0, 3, 6), (1, 4, 7), (2, 5, 8)
+    ]
+    return any(all(board[num] == player for num in win) for win in win_list)
     
 def isBoardFull(board,player):                                                  # isBoardFull function checks whether the board is full
-    if " " in board:
-        return False
-    else:
-        return True
+    return " " not in board
 
 def computerMove(board,player):                                                 # computerMove function checks the winning strategy for computer player 'O'
     for i in range(9):
@@ -63,7 +52,7 @@ def playGame():                                                                 
         except ValueError:
             print('Invalid Literal for int, please enter value between 0 and 8')
         else:
-            if index >= 0 and index <= 8:
+            if 0 <= index <= 8:
                 if board[index] == " ":
                     board[index] = "X"
                 else:
